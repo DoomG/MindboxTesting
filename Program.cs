@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MindoxTesting
 {
@@ -7,7 +8,7 @@ namespace MindoxTesting
     {
         public static void Main(string[] args)
         {
-            var cards = Card.GetMixedSamples();
+            var cards = CardSamples.GetMixedSamples();
             var sortedCards = GetSortedCards(cards);
             foreach (var card in sortedCards)
             {
@@ -18,6 +19,9 @@ namespace MindoxTesting
 
         public static IEnumerable<Card> GetSortedCards(Card[] cards)
         {
+            if(cards == null || !cards.Any())
+                throw new Exception("There are no cards!");
+
             var result = new List<Card>();
             var sourceDictionary = new Dictionary<string, Card>();
             var destinationDictionary = new Dictionary<string, Card>();
@@ -39,11 +43,22 @@ namespace MindoxTesting
                 }
             }
 
-            var current = result[0];
-            while (result.Count != cards.Length) // Sorting array
+            var current = result.FirstOrDefault();
+
+            if(current == null)
+                throw new Exception("Can't find the first card!");
+
+            try
             {
-                current = sourceDictionary[current.Destination];
-                result.Add(current);
+                while (result.Count != cards.Length) // Sorting array
+                {
+                    current = sourceDictionary[current.Destination];
+                    result.Add(current);
+                }
+            }
+            catch (KeyNotFoundException e)
+            {
+                throw new Exception("The cards chain is broken!");
             }
 
             return result;
