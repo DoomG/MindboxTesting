@@ -8,7 +8,7 @@ namespace MindoxTesting
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("FUCK IT ALL");
+            Console.WriteLine("FUCK IT ALL TWICE");
             var cards = CardSamples.GetMixedSamples();
             var sortedCards = GetSortedCards(cards);
             foreach (var card in sortedCards)
